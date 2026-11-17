@@ -1,0 +1,17 @@
+name: Build AML mod
+on:
+  push:
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ambil header AML
+        run: git clone --depth 1 https://github.com/RusJJ/AndroidModLoader.git AndroidModLoader
+      - name: Build 32-bit + 64-bit
+        run: $ANDROID_NDK_HOME/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=Android.mk NDK_APPLICATION_MK=Application.mk -j4
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HandlingTweak
+          path: libs/**/*.so
