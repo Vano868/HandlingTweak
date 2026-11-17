@@ -6,6 +6,7 @@
 // tidak cocok, mod TIDAK menulis apa pun (lihat logcat tag "HandlingTweak").
 
 #include <mod/amlmod.h>
+#include <mod/config.h>
 #include <android/log.h>
 #include <dlfcn.h>
 #include <pthread.h>
@@ -32,7 +33,7 @@ static int OFF_TRAC_LOSS = 0xA4;  // fTractionLoss
 
 static const int MAX_ENTRIES = 210;
 
-struct Config {
+struct TweakConfig {
     bool  enabled = true;
     float traction = 1.0f;
     float tractionLoss = 1.0f;
@@ -44,7 +45,7 @@ struct Config {
     bool  managerIsPointer = false;
 };
 
-static Config g_cfg;
+static TweakConfig g_cfg;
 static char   g_cfgPath[512] = {0};
 static time_t g_cfgMtime = 0;
 
@@ -100,7 +101,7 @@ static void FindConfigPath() {
 }
 
 static void LoadConfig() {
-    Config c;
+    TweakConfig c;
     FILE* f = fopen(g_cfgPath, "r");
     if (!f) { LOG("Config tidak terbaca, pakai default (1.0)"); g_cfg = c; return; }
     char line[256];
